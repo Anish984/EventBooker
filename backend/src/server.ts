@@ -3,17 +3,17 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import eventRouter from './routes/eventRouter';
 import connectDB from './utils/connectDB';
-
+import userRouter from './routes/userRouter';
 const app : Application = express();
 app.use(express.json());
 dotenv.config();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
 
-app.get('/',(req:Request,res:Response)=>{
+app.get('/home',(req:Request,res:Response)=>{
     res.send("home page");
 });
-
+app.use("/api/auth",userRouter);
 app.use("/api/events",eventRouter);
 
 app.listen(PORT,async():Promise<void>=>{
