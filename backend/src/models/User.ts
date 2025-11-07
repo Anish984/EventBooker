@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const { Schema, model, Document } = mongoose;
 
 interface Iuser extends Document {
-
     username: string;
     email: string;
     password: string;
@@ -16,7 +15,7 @@ interface Iuser extends Document {
 
 const userSchema = new Schema<Iuser>({
 
-    username: { type: String, required: true, unique: true },
+    username: { type: String, required: true },
 
     email: { type: String, required: true, unique: true },
 
@@ -33,6 +32,6 @@ userSchema.pre('save', function (this: Iuser, next) {
     this.updatedAt = new Date();
     next();
 });
-const User = model<Iuser>('User', userSchema);
 
+const User = model<Iuser>('User', userSchema);
 export default User;
