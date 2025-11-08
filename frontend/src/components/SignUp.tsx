@@ -12,7 +12,7 @@ function SignUp() {
   const handleSubmit = async(e: FormEvent<HTMLFormElement>):Promise<void> => {
     e.preventDefault();
     try{
-      const res = await axios.post("http://localhost:3000/api/auth/signup",{username:name,email:email,password:password});
+      const res = await axios.post("https://eventbooker.onrender.com/api/auth/signup",{username:name,email:email,password:password});
       if(res.status===201){ 
         navigate("/home");
       }

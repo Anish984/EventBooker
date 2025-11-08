@@ -10,7 +10,7 @@ function Login() {
   const handleSubmit = async(e: FormEvent<HTMLFormElement>):Promise<void> => {
     e.preventDefault();
     try{
-      const res = await axios.post("http://localhost:3000/api/auth/login",{email,password});
+      const res = await axios.post("https://eventbooker.onrender.com/api/auth/login",{email,password});
       if(res.status===200){ 
         alert("Login Successful");
         navigate("/home");
