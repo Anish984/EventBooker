@@ -1,13 +1,13 @@
-import React, { use } from "react";
+
 import Header from "./Header";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import { useLocation, useParams } from "react-router-dom";
+
+import { useLocation} from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Calendar, LocationEditIcon } from "lucide-react";
 const EventDetail = () => {
-  const { id } = useParams();
+  
   const { state } = useLocation();
 
   const { title, location, date, price } = state || {};
@@ -15,7 +15,7 @@ const EventDetail = () => {
   return (
     <div>
       <Header />
-      <Card className="m-10 rounded-lg overflow-hidden w-3/4 m-auto">
+      <Card className="rounded-lg overflow-hidden w-3/4 m-auto">
         <img
           className="h-100 w-full object-cover object-center"
           src="https://images.pexels.com/photos/50675/banquet-wedding-society-deco-50675.jpeg"
