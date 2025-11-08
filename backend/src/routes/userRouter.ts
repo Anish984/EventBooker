@@ -2,10 +2,9 @@ import {Router, Request, Response} from 'express';
 import User from '../models/User';
 import Event from '../models/Event';
 import Booking from '../models/Booking';
-
-
+import auth from '../middlewares/auth'
 const router = Router();
-router.post('/cancelEvent',async(req:Request,res:Response):Promise<void>=>{
+router.post('/cancelEvent',auth,async(req:Request,res:Response):Promise<void>=>{
     const {userId,EventId} = req.body;  
     try{
         const user = await User.findById(userId);
@@ -27,7 +26,7 @@ router.post('/cancelEvent',async(req:Request,res:Response):Promise<void>=>{
     }
 
 });
-router.post('/registerNewEvent',async(req:Request,res:Response):Promise<void>=>{
+router.post('/registerNewEvent',auth,async(req:Request,res:Response):Promise<void>=>{
     const {userId,EventId} = req.body;
     try{
         const user = await User.findById(userId);
@@ -35,14 +34,28 @@ router.post('/registerNewEvent',async(req:Request,res:Response):Promise<void>=>{
             res.status(404).json({message: "User not found"});
             return;
         }
-        user.registeredEvents?.push(EventId);
+        const event = await Event.findById(EventId);
+        if(!event){
+            res.status(404).send({message:"event not found"});
+            return;
+        }
+         if (!Array.isArray(user.registeredEvents)) user.registeredEvents = [];
+        if (!Array.isArray(event.attendees)) event.attendees = [];
+        if (!user.registeredEvents.some((id: any) => id.toString() === EventId)) {
+            user.registeredEvents.push(EventId);
+            await user.save();
+        }
         await user.save();
         try{
             const newBooking = new Booking({
                 user: userId,
                 event: EventId
             });
-            await newBooking.save();    
+            await newBooking.save();
+            if (!event.attendees.some((id: any) => id.toString() === userId)) {
+                event.attendees.push(userId);
+                await event.save();
+            }
         }catch(err){
             res.status(500).json({message: "Error creating booking", error: err});
             return;
@@ -52,7 +65,7 @@ router.post('/registerNewEvent',async(req:Request,res:Response):Promise<void>=>{
         res.status(500).json({message: "Error registering for event", error: err});
     }
 });
-router.post("/createEvent",async(req:Request,res:Response) : Promise<void>=>{
+router.post("/createEvent",auth,async(req:Request,res:Response) : Promise<void>=>{
     try{
         const title = req.body.title;
         const description = req.body.description;
@@ -67,12 +80,17 @@ router.post("/createEvent",async(req:Request,res:Response) : Promise<void>=>{
             address,
             organizer,
         });
+        await newEvent.save();
+        // if(!newEvent){
+        //     res.status(500).json({message: "Error creating event"})
+        // }
+        res.status(200).send({message:"successfully created",event:newEvent});
     }catch(err){
         res.status(500).json({message: "Error creating event", error: err});
     }
 });
-router.get("/getRegisteredEvents", async(req: Request, res: Response):Promise<void> => {
-    const users = Event.find().then((events)=>{
+router.get("/getRegisteredEvents", auth,async(req: Request, res: Response):Promise<void> => {
+    const users = Event.find().select('-attendees').lean().then((events)=>{
         res.json(events);
     }).catch((err)=>{
         res.status(500).json({message: "Error fetching users", error: err});   
