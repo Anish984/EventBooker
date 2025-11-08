@@ -1,6 +1,7 @@
 import { defineConfig } from "tailwindcss";
 
 export default defineConfig({
+  plugins: [require("tw-animate-css")], 
   darkMode: "class", // enable 'dark' class strategy
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
