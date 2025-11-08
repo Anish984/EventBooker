@@ -6,9 +6,9 @@ import connectDB from './utils/connectDB';
 import userRouter from './routes/userRouter';
 import authRouter from './routes/authRouter'
 const app : Application = express();
+app.use(cors());
 app.use(express.json());
 dotenv.config();
-app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 app.get('/home',(req:Request,res:Response)=>{
