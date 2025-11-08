@@ -15,7 +15,7 @@ app.use(
 );
 
 // ✅ Handle preflight requests (OPTIONS)
-app.options("(.*)", cors());
+app.options('*', cors());
 app.use(express.json());
 dotenv.config();
 const PORT = process.env.PORT || 3000;
