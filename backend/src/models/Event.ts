@@ -18,7 +18,7 @@ const eventSchema = new Schema<IEvent>({
     title: { type: String, required: true },
     description: { type: String, required: true },
     date: { type: Date, required: true },
-    location: { type: String, required: true },
+    address: { type: String, required: true },
     organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User',default: [] }],
     updatedAt: { type: Date }
