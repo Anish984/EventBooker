@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import eventRouter from './routes/eventRouter';
 import connectDB from './utils/connectDB';
 import userRouter from './routes/userRouter';
+import authRouter from './routes/authRouter'
 const app : Application = express();
 app.use(express.json());
 dotenv.config();
@@ -13,8 +14,9 @@ const PORT = process.env.PORT || 3000;
 app.get('/home',(req:Request,res:Response)=>{
     res.send("home page");
 });
-app.use("/api/auth",userRouter);
-app.use("/api/events",eventRouter);
+app.use("/api",userRouter);
+app.use("/api/auth/",authRouter);
+app.use("/api",eventRouter);
 
 app.listen(PORT,async():Promise<void>=>{
     try{
