@@ -1,10 +1,7 @@
-import React from "react";
 import logo from "../assets/react.svg";
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "./ui/card";
 import { Calendar, LocationEditIcon } from "lucide-react";

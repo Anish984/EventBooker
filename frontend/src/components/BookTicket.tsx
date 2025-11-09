@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Header from "./Header";
 import { Card, CardContent, CardDescription, CardHeader } from "./ui/card";
 import { useLocation } from "react-router-dom";
-import { Label } from "@radix-ui/react-label";
 import { Button } from "./ui/button";
 import { Minus, Plus } from "lucide-react";
 

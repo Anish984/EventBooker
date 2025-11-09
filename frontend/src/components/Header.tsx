@@ -1,4 +1,3 @@
-import React from "react";
 import { Separator } from "./ui/separator";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Label } from "./ui/label";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group";
 import { SearchIcon } from "lucide-react";
