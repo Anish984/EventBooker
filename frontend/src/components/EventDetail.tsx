@@ -2,16 +2,20 @@ import React, { use } from "react";
 import Header from "./Header";
 import { Card, CardContent, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Label } from "./ui/label";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Calendar, LocationEditIcon } from "lucide-react";
+
 const EventDetail = () => {
   const { id } = useParams();
   const { state } = useLocation();
+  const navigate = useNavigate(); 
 
+  const handleBuyTicket = () => {
+    navigate(`/event/${id}/book` , {state : {title, location, date, price}});
+  }
+  
   const { title, location, date, price } = state || {};
-
   return (
     <div>
       <Header />
@@ -45,9 +49,7 @@ const EventDetail = () => {
             </div>
           </div>
           <div>
-            <Button variant={"default"} className="w-40 h-10 mt-4">
-              Buy Ticket
-            </Button>
+            <Button variant={"default"}  onClick={handleBuyTicket}>Buy ticket</Button>
           </div>
         </div>
       </Card>
