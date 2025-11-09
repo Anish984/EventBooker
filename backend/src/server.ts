@@ -6,13 +6,26 @@ import connectDB from './utils/connectDB';
 import userRouter from './routes/userRouter';
 import authRouter from './routes/authRouter'
 const app : Application = express();
+
+
 app.use(
   cors({
-    origin: "https://event-booker.vercel.app", // your deployed frontend
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    origin: (origin, callback) => {
+      // If there's no origin (like Postman), allow it
+      if (!origin) return callback(null, true);
+
+      // Allow any domain starting with "https://event-booker"
+      if (origin.startsWith("https://event-booker") || origin === "http://localhost:3000") {
+          return callback(null, true);
+      }
+      // Otherwise, block it
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
+
+
 
 // ✅ Handle preflight requests (OPTIONS)
 app.options(/.*/, cors());
