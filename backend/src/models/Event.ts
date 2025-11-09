@@ -24,5 +24,10 @@ const eventSchema = new Schema<IEvent>({
     updatedAt: { type: Date }
 },
 { timestamps: true });  
-
+eventSchema.index({
+    title:"text",
+    description:"text",
+    address:"text",
+    organizer:"text"
+})
 export default model<IEvent>('Event', eventSchema);
