@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 
 const { Schema, model, Document } = mongoose;
 
-interface Iuser extends Document {
+export interface Iuser extends Document {
     username: string;
     email: string;
     password: string;
     createdAt?: Date;
     updatedAt?: Date;
     createdEvents?: mongoose.Types.ObjectId[];
-    registeredEvents?: mongoose.Types.ObjectId[];
+    bookings?: mongoose.Types.ObjectId[];
 
 }
 
@@ -23,7 +23,7 @@ const userSchema = new Schema<Iuser>({
 
     createdEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
 
-    registeredEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }]
+    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }]
 
 },
 { timestamps: true });
