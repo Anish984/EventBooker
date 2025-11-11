@@ -1,5 +1,5 @@
 import Event from "../../models/Event";
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 export const searchEvents =  async (req:Request, res:Response) => {
   try {
     const search = (req.query.search as string)?.trim();

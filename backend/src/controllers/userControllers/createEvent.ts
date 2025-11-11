@@ -1,4 +1,4 @@
-import {Router, Request, Response} from 'express';
+import {Request, Response} from 'express';
 import Event from '../../models/Event';
 
 import cloudinary from "../../utils/cloudinary";

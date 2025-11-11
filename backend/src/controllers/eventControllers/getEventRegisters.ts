@@ -1,5 +1,5 @@
-import Event from "../../models/Event";
-import { Router, Request, Response } from 'express';
+
+import {Request, Response } from 'express';
 import User from '../../models/User'
 import Booking from '../../models/Booking';
 
