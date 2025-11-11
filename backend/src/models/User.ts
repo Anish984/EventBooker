@@ -10,7 +10,9 @@ export interface Iuser extends Document {
     updatedAt?: Date;
     createdEvents?: mongoose.Types.ObjectId[];
     bookings?: mongoose.Types.ObjectId[];
-
+    idCard:string;
+    college:string;
+    profilePic:string;
 }
 
 const userSchema = new Schema<Iuser>({
@@ -23,7 +25,13 @@ const userSchema = new Schema<Iuser>({
 
     createdEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
 
-    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }]
+    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Booking" }],
+
+    idCard:{type:String},
+
+    college:{type:String},
+
+    profilePic:{type:String}
 
 },
 { timestamps: true });

@@ -57,8 +57,8 @@ router.post("/cancelEvent", auth, async (req: Request, res: Response): Promise<v
 
 
 //registerNewEvent
-router.post("/registerNewEvent",upload.single("idCard"),async (req: Request, res: Response): Promise<void> => {
-    const { userId, EventId } = req.body;
+router.post("/registerNewEvent",async (req: Request, res: Response): Promise<void> => {
+    const { userId, eventId } = req.body;
 
     try {
       // 1️⃣ Validate User
@@ -68,53 +68,57 @@ router.post("/registerNewEvent",upload.single("idCard"),async (req: Request, res
         return;
       }
 
-      // 2️⃣ Validate Event
-      const event = await Event.findById(EventId);
+      // 2️⃣ Check if user has uploaded ID card
+      if (!user.idCard) {
+        res
+          .status(400)
+          .json({ message: "Please upload your ID card before registering." });
+        return;
+      }
+
+      // 3️⃣ Validate Event
+      const event = await Event.findById(eventId);
       if (!event) {
         res.status(404).json({ message: "Event not found" });
         return;
       }
 
-      // 3️⃣ Ensure arrays exist
+      // 4️⃣ Ensure arrays exist
       if (!Array.isArray(user.bookings)) user.bookings = [];
       if (!Array.isArray(event.attendees)) event.attendees = [];
 
-      // 4️⃣ Upload image to Cloudinary (required)
-      if (!req.file) {
-        res.status(400).json({ message: "ID card image is required" });
+      // 5️⃣ Check if user already registered
+      const alreadyRegistered = await Booking.findOne({
+        user: userId,
+        event: eventId,
+      });
+      if (alreadyRegistered) {
+        res.status(400).json({ message: "You are already registered for this event." });
         return;
       }
 
-      const localPath = req.file.path;
-      const uploadResult = await cloudinary.uploader.upload(localPath, {
-        folder: "event-id-cards",
-      });
-      const idCardUrl = uploadResult.secure_url;
-      fs.unlinkSync(localPath);
-
-      // 5️⃣ Create new booking
+      // 6️⃣ Create new booking (no idCardUrl needed here)
       const newBooking = new Booking({
         user: userId,
-        event: EventId,
-        idCardUrl,
+        event: eventId,
         status: "pending",
       });
       await newBooking.save();
 
-      // 6️⃣ Link booking to user
+      // 7️⃣ Link booking to user
       user.bookings.push(newBooking._id as mongoose.Types.ObjectId);
       await user.save();
 
-      // 7️⃣ Add user to event attendees
+      // 8️⃣ Add user to event attendees
       if (!event.attendees.some((id: any) => id.toString() === userId)) {
         event.attendees.push(userId);
         await event.save();
       }
 
+      // 9️⃣ Respond success
       res.status(200).json({
         message: "Registered successfully",
         bookingId: newBooking._id,
-        imageUrl: idCardUrl,
       });
     } catch (err) {
       console.error(err);
@@ -123,21 +127,30 @@ router.post("/registerNewEvent",upload.single("idCard"),async (req: Request, res
   }
 );
 
+
+
 //createEvent
-router.post("/createEvent",auth,async(req:Request,res:Response) : Promise<void>=>{
+router.post("/createEvent",auth,upload.single("eventPic"),async(req:Request,res:Response) : Promise<void>=>{
     try{
-        const title = req.body.title;
-        const description = req.body.description;
-        const date = req.body.date;
-        const address = req.body.address;
-        const organizer = req.body.organizer;
-        
+       const { title, description, date, address, organizer } = req.body;
+
+      if (!title || !description || !date || !address) {
+        res.status(400).json({ message: "Missing required fields" });
+        return;
+      }
+      let eventPic = "";
+      if(req.file){
+        const cloudUpload = await cloudinary.uploader.upload(req.file.path,{folder:"event-pics"});
+        eventPic = cloudUpload.secure_url;
+        fs.unlinkSync(req.file.path);
+      }
         const newEvent = new Event({
             title,
             description,
             date,
             address,
             organizer,
+            eventPic:eventPic||null
         });
         await newEvent.save();
         res.status(200).send({message:"successfully created",event:newEvent});
@@ -145,12 +158,14 @@ router.post("/createEvent",auth,async(req:Request,res:Response) : Promise<void>=
         res.status(500).json({message: "Error creating event", error: err});
     }
 });
+
+
 router.get("/getRegisteredEvents",auth,async (req: Request, res: Response): Promise<void> => {
     try {
       const userId = (req as any).userId
 
       const bookings = await Booking.find({ user: userId })
-        .populate("event") // ✅ automatically replaces eventId with full event details
+        .populate("event") 
         .lean();
 
       const registeredEvents = bookings.map((b) => b.event);
@@ -163,5 +178,55 @@ router.get("/getRegisteredEvents",auth,async (req: Request, res: Response): Prom
   }
 );
 
+
+// helper type so TS knows about multer files on req
+type MulterFiles = {
+  [fieldname: string]: Express.Multer.File[] | undefined;
+};
+
+router.post(
+  "/updateProfile",
+  upload.fields([{ name: "idCard" }, { name: "profilePic" }]),
+  async (req: Request, res: Response): Promise<Response | void> => {
+    try {
+      const { userId, name, college } = req.body;
+
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      if (name) user.username = name;
+      if (college) user.college = college;
+
+      const files = (req.files as unknown) as MulterFiles | undefined;
+
+      // normalize cloudinary reference (supports cloudinary.v2 or cloudinary default export)
+      const cloud = (cloudinary as any).v2 ?? (cloudinary as any);
+
+      // Upload profile picture (optional)
+      if (files?.profilePic && files.profilePic[0]) {
+        const filePath = files.profilePic[0].path;
+        const profileUpload = await cloud.uploader.upload(filePath, { folder: "profiles" });
+        user.profilePic = profileUpload.secure_url;
+        try { fs.unlinkSync(filePath); } catch { /* ignore */ }
+      }
+
+      // Upload ID card (optional)
+      if (files?.idCard && files.idCard[0]) {
+        const filePath = files.idCard[0].path;
+        const idUpload = await cloud.uploader.upload(filePath, { folder: "id-cards" });
+        user.idCard = idUpload.secure_url;
+        try { fs.unlinkSync(filePath); } catch { /* ignore */ }
+      }
+
+      await user.save();
+
+      return res.json({ success: true, user });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error updating profile", error: err });
+    }
+  }
+);
+// ...existing code...
 
 export default router;

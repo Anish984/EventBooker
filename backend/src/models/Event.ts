@@ -12,6 +12,7 @@ export interface IEvent extends Document {
     attendees: mongoose.Schema.Types.ObjectId[];
     createdAt: Date;
     updatedAt: Date;
+    eventPic:string;
 }
 const eventSchema = new Schema<IEvent>({
 
@@ -21,7 +22,8 @@ const eventSchema = new Schema<IEvent>({
     address: { type: String, required: true },
     organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User',default: [] }],
-    updatedAt: { type: Date }
+    updatedAt: { type: Date },
+    eventPic:{type:String}
 },
 { timestamps: true });  
 eventSchema.index({
