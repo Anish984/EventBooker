@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Calendar, LocationEditIcon } from "lucide-react";
+import { TicketDialog } from "./TicketDialog";
 
 const EventDetail = () => {
   const { id } = useParams();
@@ -48,7 +49,8 @@ const EventDetail = () => {
             </div>
           </div>
           <div>
-            <Button variant={"default"}  onClick={handleBuyTicket}>Buy ticket</Button>
+            <TicketDialog title = {title} location = {location} date = {date} price = {price} />
+            {/* <Button variant={"default"}  onClick={handleBuyTicket}>Buy ticket</Button> */}
           </div>
         </div>
       </Card>

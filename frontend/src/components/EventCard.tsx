@@ -1,9 +1,5 @@
 import logo from "../assets/react.svg";
-import {
-  Card,
-  CardDescription,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardDescription, CardTitle } from "./ui/card";
 import { Calendar, LocationEditIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "./ui/badge";
@@ -32,6 +28,7 @@ const EventCard = ({ id, title, location, date, price }: Props) => {
       >
         <img src={logo} alt="gg" className="w-40 h-40 m-5" />
         <CardTitle className="text-xl">{title}</CardTitle>
+        
 
         <div className="flex justify-between">
           <div>
@@ -46,7 +43,7 @@ const EventCard = ({ id, title, location, date, price }: Props) => {
             </div>
           </div>
           <div>
-            <Badge className="h-9 text-"   variant={"secondary"}>
+            <Badge className="h-9 text-" variant={"secondary"}>
               ₹{price}/-
             </Badge>
           </div>
