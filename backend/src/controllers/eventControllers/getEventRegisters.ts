@@ -4,7 +4,7 @@ import User from '../../models/User'
 import Booking from '../../models/Booking';
 
 export const getEventRegisters = async(req:Request,res:Response):Promise<void>=>{
-    const {eventId} = req.body;
+    const eventId = req.query.eventId as string;
     try{
         const bookings = await Booking.find({ event: eventId }).select('user').lean();
         const userIds = bookings.map(b => b.user);

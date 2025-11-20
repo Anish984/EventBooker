@@ -21,10 +21,10 @@ export const updateProfile =  async (req: Request, res: Response): Promise<Respo
 
       const files = (req.files as unknown) as MulterFiles | undefined;
 
-      // normalize cloudinary reference (supports cloudinary.v2 or cloudinary default export)
+    
       const cloud = (cloudinary as any).v2 ?? (cloudinary as any);
 
-      // Upload profile picture (optional)
+     
       if (files?.profilePic && files.profilePic[0]) {
         const filePath = files.profilePic[0].path;
         const profileUpload = await cloud.uploader.upload(filePath, { folder: "profiles" });
@@ -32,7 +32,7 @@ export const updateProfile =  async (req: Request, res: Response): Promise<Respo
         try { fs.unlinkSync(filePath); } catch { /* ignore */ }
       }
 
-      // Upload ID card (optional)
+     
       if (files?.idCard && files.idCard[0]) {
         const filePath = files.idCard[0].path;
         const idUpload = await cloud.uploader.upload(filePath, { folder: "id-cards" });
