@@ -18,8 +18,15 @@ const auth = (req: Request, res: Response, next: NextFunction): void => {
       return;
     }
 
-    const decoded = jwt.verify(token, secret);
-    (req as any).user = decoded; // cast to avoid TS error or declare Request augmentation
+    const decoded = jwt.verify(token, secret) as jwt.JwtPayload & { userId: string };
+
+    console.log("AUTH DEBUG 1: Decoded JWT Payload:", decoded); // Log the full decoded object
+
+    // Ensure this line correctly extracts the string property!
+    (req as any).userId = decoded.userId; 
+
+    console.log("AUTH DEBUG 2: Value assigned to req.userId:", (req as any).userId); // Log the value assigned
+
     next();
   } catch (err) {
     res.status(401).json({ success: false, message: "Invalid or expired token" });
