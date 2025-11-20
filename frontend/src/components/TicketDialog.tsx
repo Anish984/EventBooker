@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar, CreditCard, HomeIcon, LocationEdit } from "lucide-react";
+import { Calendar, CreditCard, LocationEdit } from "lucide-react";
 import { Separator } from "./ui/separator";
 import {
   Select,
@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from "./ui/select";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 interface TicketDialogProps {
   title: string;
@@ -37,132 +39,137 @@ export function TicketDialog({
 }: TicketDialogProps) {
   const [ticketCount, setTicketCount] = useState<number>(1);
   const totalAmount = price * ticketCount;
+
+  const navigate = useNavigate();
+
+  const form = useForm({
+    defaultValues: {
+      firstname: "",
+      lastname: "",
+      phonenumber: "",
+      ticketCount: 1,
+      eventTitle: title,
+      eventDate: date,
+      eventLocation: location,
+    },
+  });
+
+  const onSubmit = (data: any) => {
+    navigate("/event/:id/qr", { state: data }); 
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Book Tickets</Button>
+        <Button className="mr-4 h-10">Book Tickets</Button>
       </DialogTrigger>
+
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Book Your Tickets</DialogTitle>
+
           <div className="flex gap-5 mt-5">
-            <div>
-              <img
-                src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg"
-                alt=""
-                className="w-25 h-25 rounded-2xl"
-              />
-            </div>
+            <img
+              src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg"
+              alt=""
+              className="w-24 h-24 rounded-2xl object-cover"
+            />
 
             <div>
-              <h3>{title}</h3>
-              <div className="flex gap-2">
-                <div>
-                  <Calendar className="w-4" />
-                </div>
-                <div>
-                  <DialogDescription>{date}</DialogDescription>
-                </div>
+              <h3 className="font-semibold">{title}</h3>
+
+              <div className="flex gap-2 items-center">
+                <Calendar className="w-4" />
+                <DialogDescription>{date}</DialogDescription>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <LocationEdit className="w-4" />
                 <DialogDescription>{location}</DialogDescription>
               </div>
             </div>
           </div>
         </DialogHeader>
+
         <Separator className="mt-2" />
 
-        <form className="grid gap-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
           <div className="grid gap-3">
-            <Label htmlFor="name-1">Number of tickets</Label>
-            {/* <Input id="name-1" name="name" defaultValue="Pedro Duarte" /> */}
-            <Select onValueChange={(value) => setTicketCount(parseInt(value))}>
-              <SelectTrigger className="w-full">
+            <Label>Number of tickets</Label>
+
+            <Select
+              onValueChange={(value) => {
+                const num = parseInt(value);
+                setTicketCount(num);
+                form.setValue("ticketCount", num);
+              }}
+            >
+              <SelectTrigger>
                 <SelectValue placeholder="Select number of tickets" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">1</SelectItem>
-                <SelectItem value="2">2</SelectItem>
-                <SelectItem value="3">3</SelectItem>
-                <SelectItem value="4">4</SelectItem>
-                <SelectItem value="5">5</SelectItem>
-                <SelectItem value="6">6</SelectItem>
-                <SelectItem value="7">7</SelectItem>
-                <SelectItem value="8">8</SelectItem>
-                <SelectItem value="9">9</SelectItem>
-                <SelectItem value="10   ">10</SelectItem>
+                {[...Array(10)].map((_, i) => (
+                  <SelectItem key={i} value={(i + 1).toString()}>
+                    {i + 1}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
+
             <Separator className="mt-2" />
           </div>
-          <DialogDescription className="font-medium mb-1">
-            Contact Information
-          </DialogDescription>
+
+          <DialogDescription className="font-medium">Contact Information</DialogDescription>
 
           <div className="flex gap-3">
             <div>
-              <Label htmlFor="firstname">First Name</Label>
+              <Label>First Name</Label>
               <Input
-                id="firstname"
-                name="firstname"
                 placeholder="First Name"
-                required
+                {...form.register("firstname", { required: true })}
               />
             </div>
 
             <div>
-              <Label htmlFor="lastname">Last Name</Label>
+              <Label>Last Name</Label>
               <Input
-                id="lastname"
-                name="lastname"
                 placeholder="Last Name"
-                required
+                { ...form.register("lastname", { required: true })}
               />
             </div>
           </div>
+
           <div>
-            <Label htmlFor="phonenumber">Phone Number</Label>
+            <Label>Phone Number</Label>
             <Input
-              id="phonenumber"
-              name="phonenumber"
               placeholder="Phone Number"
-              required
+              {...form.register("phonenumber", { required: true })}
             />
           </div>
+
           <Separator className="mt-2 mb-2" />
 
-          <DialogDescription className="font-medium mb-1">
-            Payment Summary
-          </DialogDescription>
-          <div className="flex justify-between">
-            <Label htmlFor="Tickets" className="font-normal">
-              Tickets ({ticketCount}x)
-            </Label>
+          <DialogDescription className="font-medium">Payment Summary</DialogDescription>
 
-            <Label htmlFor="Tickets" className="font-normal">
-              ₹{totalAmount}/-
-            </Label>
+          <div className="flex justify-between">
+            <Label className="font-normal">Tickets ({ticketCount}x)</Label>
+            <Label className="font-normal">₹{totalAmount}/-</Label>
           </div>
 
           <Separator />
-          <div className="flex justify-between">
-            <Label htmlFor="Tickets" className="font-semibold text-lg">
-              Total
-            </Label>
 
-            <Label htmlFor="Tickets" className="font-semibold text-lg">
-              ₹{totalAmount}/-
-            </Label>
+          <div className="flex justify-between">
+            <Label className="font-semibold text-lg">Total</Label>
+            <Label className="font-semibold text-lg">₹{totalAmount}/-</Label>
           </div>
 
           <DialogFooter className="mt-4">
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
+
             <Button type="submit">
-              <CreditCard />
+              <CreditCard className="mr-2" />
               Proceed to Payment
             </Button>
           </DialogFooter>

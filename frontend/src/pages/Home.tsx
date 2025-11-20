@@ -4,7 +4,7 @@ import Events from '../components/Events'
 const Home = () => {
   return (
     <>
-        <Header />
+        <Header/>
         <Events/>
                 
     </>

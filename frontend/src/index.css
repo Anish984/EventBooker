@@ -2,12 +2,18 @@
 @import "tw-animate-css";
 @plugin "tailwindcss-animate";
 
+
 @custom-variant dark (&:is(.dark *));
 /* @tailwind preflight;
 @tailwind components; */
 /* @tailwind utilities;
 
 /* 🌿 Base Theme Styles */
+
+
+body {
+  @apply font-sans;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

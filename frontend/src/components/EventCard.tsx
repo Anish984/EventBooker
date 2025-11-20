@@ -3,6 +3,7 @@ import { Card, CardDescription, CardTitle } from "./ui/card";
 import { Calendar, LocationEditIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "./ui/badge";
+import { Label } from "./ui/label";
 
 type Props = {
   id: string;
@@ -19,36 +20,38 @@ const EventCard = ({ id, title, location, date, price }: Props) => {
   };
   return (
     <div>
-      <Card
-        className="w-60 m-4 p-4 cursor-pointer
-  transform-gpu transition-shadow transition-border
-  duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
-  hover:scale-[1.03] hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] hover:border-blue-400/40"
+      <div
+        className="transition-transform duration-300 hover:scale-105 cursor-pointer"
         onClick={handleClick}
       >
-        <img src={logo} alt="gg" className="w-40 h-40 m-5" />
-        <CardTitle className="text-xl">{title}</CardTitle>
-        
+        <img
+          src="https://images.pexels.com/photos/7307566/pexels-photo-7307566.jpeg"
+          alt="gg"
+          className="w-70 h-85 m-auto mt-15 rounded-xl"
+        />
+        <Card className="w-65 m-4 -mt-14 p-4 transform-gpu transition-shadow">
+          <CardTitle className="text-xl font-bold">{title}</CardTitle>
 
-        <div className="flex justify-between">
-          <div>
-            <div className="flex gap-2 mt-2">
-              <LocationEditIcon className="w-5" />
-              <CardDescription>{location}</CardDescription>
+          <div className="flex justify-between">
+            <div>
+              <div className="flex gap-1 mt-2 mb-2">
+                <Calendar className="w-4.5" />
+                <CardDescription>{date}</CardDescription>
+              </div>
+              {/* <Badge className="h-9 text-" variant={"secondary"}>
+                ₹{price}/-
+              </Badge> */}
+              <Label className="text-2xl font-bold">₹{price}/-</Label>
             </div>
-
-            <div className="flex gap-2 mt-2">
-              <Calendar className="w-5" />
-              <CardDescription>{date}</CardDescription>
+            <div>
+              <div className="flex gap-1 mt-2">
+                <LocationEditIcon className="w-4.5" />
+                <CardDescription>{location}</CardDescription>
+              </div>
             </div>
           </div>
-          <div>
-            <Badge className="h-9 text-" variant={"secondary"}>
-              ₹{price}/-
-            </Badge>
-          </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };
