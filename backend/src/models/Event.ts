@@ -12,7 +12,7 @@ export interface IEvent extends Document {
     attendees: mongoose.Schema.Types.ObjectId[];
     createdAt: Date;
     updatedAt: Date;
-    eventPic:string;
+    eventPic?:string;
 }
 const eventSchema = new Schema<IEvent>({
 
