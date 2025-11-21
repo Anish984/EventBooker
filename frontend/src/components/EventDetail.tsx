@@ -1,26 +1,19 @@
 import Header from "./Header";
 import { Card, CardContent, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Calendar, LocationEditIcon } from "lucide-react";
 import { TicketDialog } from "./TicketDialog";
 import { Label } from "./ui/label";
 
 const EventDetail = () => {
-  const { id } = useParams();
   const { state } = useLocation();
-  const navigate = useNavigate();
-
-  const handleBuyTicket = () => {
-    navigate(`/event/${id}/book`, { state: { title, location, date, price } });
-  };
 
   const { title, location, date, price } = state || {};
   return (
     <div>
       <Header />
-      <Card className="m-10 rounded-lg overflow-hidden w-3/4 m-auto">
+      <Card className="rounded-lg overflow-hidden w-3/4 m-auto">
         <img
           className="h-100 w-full object-cover object-center"
           src="https://images.pexels.com/photos/50675/banquet-wedding-society-deco-50675.jpeg"

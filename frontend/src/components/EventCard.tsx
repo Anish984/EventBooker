@@ -1,8 +1,6 @@
-import logo from "../assets/react.svg";
 import { Card, CardDescription, CardTitle } from "./ui/card";
 import { Calendar, LocationEditIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "./ui/badge";
 import { Label } from "./ui/label";
 
 type Props = {
@@ -38,9 +36,6 @@ const EventCard = ({ id, title, location, date, price }: Props) => {
                 <Calendar className="w-4.5" />
                 <CardDescription>{date}</CardDescription>
               </div>
-              {/* <Badge className="h-9 text-" variant={"secondary"}>
-                ₹{price}/-
-              </Badge> */}
               <Label className="text-2xl font-bold">₹{price}/-</Label>
             </div>
             <div>

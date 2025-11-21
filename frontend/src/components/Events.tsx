@@ -34,9 +34,6 @@ const Events = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const filteredEvents = events.filter((ev) =>
-    ev.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div>
@@ -88,7 +85,7 @@ const Events = () => {
           id="3"
           title="Chennai expo"
           location="Vandalur"
-          date="10th Sep 2025"
+          date="10th Sep 2025"  
           price="400"
         />
         <EventCard
