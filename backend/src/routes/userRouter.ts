@@ -6,6 +6,7 @@ import {registerNewEvent} from '../controllers/userControllers/registerNewEvent'
 import { createEvent } from '../controllers/userControllers/createEvent';
 import { getRegisteredEvents } from '../controllers/userControllers/getRegisteredEvents';
 import { updateProfile } from '../controllers/userControllers/uploadProfile';
+import {getCreatedEvents} from '../controllers/userControllers/getCreatedEvents'
 const router = Router();
 
 
@@ -21,6 +22,7 @@ router.post("/createEvent",auth,upload.single("eventPic"),createEvent);
 //get the registered events of the user
 router.get("/getRegisteredEvents",auth,getRegisteredEvents);
 
+router.get("/createdEvents",auth,getCreatedEvents);
 
 router.post("/updateProfile",auth,upload.fields([{ name: "idCard" }, { name: "profilePic" }]),updateProfile);
 
