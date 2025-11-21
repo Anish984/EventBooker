@@ -8,18 +8,20 @@ function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async(e: FormEvent<HTMLFormElement>):Promise<void> => {
-    e.preventDefault();
-    try{
-      const res = await axios.post("https://eventbooker.onrender.com/api/auth/login",{email,password});
-      if(res.status===200){ 
-        alert("Login Successful");
-        navigate("/home");
-      }
-    }catch(e){
-      console.error("Login failed",e);
-      alert("Login Failed. Please check your credentials and try again.");
+  e.preventDefault();
+  try{
+    const res = await axios.post("http://localhost:3000/api/auth/login",{email,password});
+    if(res.status===200){ 
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userId", res.data.userId);
+      alert("Login Successful");
+      navigate("/landing");
     }
-  };
+  }catch(e){
+    console.error("Login failed",e);
+    alert("Login Failed. Please check your credentials and try again.");
+  }
+};
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
@@ -71,8 +73,7 @@ function Login() {
         <div className="mt-4 text-center">
           <button
             onClick={() => navigate("/signup")}
-            className="text-sm text-gray-600 transition-colors duration-200 hover:text-black"
-          >
+            className="text-sm text-gray-600 transition-colors duration-200 hover:text-black">
             New User? Sign Up here
           </button>
         </div>

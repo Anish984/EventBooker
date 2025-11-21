@@ -2,7 +2,7 @@ import HostEventForm from "./HostEventForm";
 
 const Hostevent = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen">
       <HostEventForm />
     </div>
   );

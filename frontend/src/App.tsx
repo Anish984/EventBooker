@@ -5,18 +5,25 @@ import Home from "./pages/Home";
 import EventDetail from "./components/EventDetail";
 import HostEvent from "./pages/HostEvent";
 import BookTicket from "./components/BookTicket";
+import { ThemeProvider } from "./components/themeProvider";
+import QRPage from "./components/qrPage";
+import LandingPage from "./pages/LandingPage";
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/event/:id" element={<EventDetail />} />
-        <Route path="/host-event" element={<HostEvent />} />
-        <Route path="/event/:id/book" element={<BookTicket />} />
-      </Routes>
-    </Router>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/event/:id" element={<EventDetail />} />
+          <Route path="/host-event" element={<HostEvent />} />
+          <Route path="/event/:id/book" element={<BookTicket />} />
+          <Route path="/event/:id/qr" element={<QRPage/>} />
+          <Route path="/landing" element={<LandingPage />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 };
 export default App;

@@ -4,6 +4,8 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const HostEventForm = () => {
   const [eventData, setEventData] = useState({
@@ -13,15 +15,52 @@ const HostEventForm = () => {
     price: "",
     description: "",
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  // const handleClick = ()=>{
+  //   navigate("/home")
+  // }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Event Created:", eventData);
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const newEvent = {
+        title: eventData.name,
+        description: eventData.description,
+        date: eventData.date,
+        address: eventData.location,
+        organizer: localStorage.getItem("userId"),
+      };
+
+      const res = await axios.post(
+        "http://localhost:3000/api/createEvent",
+        newEvent,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        alert("Event Created Successfully!");
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to create event");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,7 +70,11 @@ const HostEventForm = () => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+          <div className="mb-5">
+            <Label htmlFor="picture">Upload Event poster</Label>
+            <Input type="file" id="picture" accept="image/*" />
+          </div>
+          <div className="mb-5">
             <Label htmlFor="name">Event Name</Label>
             <Input
               id="name"
@@ -43,7 +86,7 @@ const HostEventForm = () => {
             />
           </div>
 
-          <div>
+          <div className="mb-5">
             <Label htmlFor="date">Date</Label>
             <Input
               id="date"
@@ -55,7 +98,7 @@ const HostEventForm = () => {
             />
           </div>
 
-          <div>
+          <div className="mb-5">
             <Label htmlFor="location">Location</Label>
             <Input
               id="location"
@@ -91,8 +134,8 @@ const HostEventForm = () => {
             />
           </div>
 
-          <Button type="submit" className="w-full mt-4">
-            Create Event
+          <Button type="submit" className="w-full mt-4" disabled={loading}>
+            {loading ? "Creating..." : "Create Event"}
           </Button>
         </form>
       </CardContent>
