@@ -130,7 +130,7 @@ const HostEventForm = () => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <Label htmlFor="price">Ticket Price (₹)</Label>
             <Input
               id="price"
@@ -140,7 +140,7 @@ const HostEventForm = () => {
               value={eventData.price}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
 
           <div>
             <Label htmlFor="description">Description</Label>

@@ -31,7 +31,7 @@ function Login() {
         console.log("UserId stored:", localStorage.getItem("userId"));
 
         alert("Login Successful");
-        navigate("/home"); // Changed from /landing to /home
+        navigate("/landing"); // Changed from /landing to /home
       }
     } catch (error: any) {
       console.error("Login failed:", error);

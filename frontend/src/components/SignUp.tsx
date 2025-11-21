@@ -35,7 +35,7 @@ function SignUp() {
         console.log("UserId stored:", localStorage.getItem("userId"));
 
         alert("Signup Successful");
-        navigate("/home");
+        navigate("/landing");
       } else {
         alert("Signup failed. Please try again.");
       }
