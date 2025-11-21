@@ -1,11 +1,12 @@
-import { defineConfig } from "tailwindcss";
-
-export default defineConfig({
-  plugins: [require("tw-animate-css")],
-  darkMode: "class", // enable 'dark' class strategy
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+      },
       colors: {
         background: "rgb(var(--background) / <alpha-value>)",
         surface: "rgb(var(--surface) / <alpha-value>)",
@@ -17,11 +18,7 @@ export default defineConfig({
           hover: "rgb(var(--accent-hover) / <alpha-value>)",
         },
       },
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        serif: ["Georgia", "serif"],
-      },
     },
   },
-  plugins: [],
-});
+  plugins: [require("tailwindcss-animate")],
+};

@@ -15,7 +15,7 @@ function Login() {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userId", res.data.userId);
       alert("Login Successful");
-      navigate("/home");
+      navigate("/landing");
     }
   }catch(e){
     console.error("Login failed",e);

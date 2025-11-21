@@ -1,4 +1,3 @@
-import { Separator } from "./ui/separator";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,7 @@ const Header = () => {
   };
   return (
     <div>
-      <header className="sticky top-0 bg-whitez-10 shadow-md py-2">
+      <header className="sticky top-0 bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-800/50 py-2 z-50 backdrop-blur-sm border-b dark:border-gray-800">
         <div className="flex justify-between items-center">
           <div>
             <Label className="text-3xl ml-10">Event Booker</Label>
@@ -34,7 +33,6 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <Separator className="my-4 " />
     </div>
   );
 };
