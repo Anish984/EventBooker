@@ -32,7 +32,6 @@ const userSchema = new Schema<Iuser>({
     college:{type:String},
 
     profilePic:{type:String}
-
 },
 { timestamps: true });
 

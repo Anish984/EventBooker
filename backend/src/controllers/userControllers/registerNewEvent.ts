@@ -23,7 +23,10 @@ export const registerNewEvent =async (req: Request, res: Response): Promise<void
           .json({ message: "Please upload your ID card before registering." });
         return;
       }
-
+      if(!user.college){
+        res.status(400).json({message:"Please update your college name before registering."})
+        return;
+      }
       // 3️⃣ Validate Event
       const event = await Event.findById(eventId);
       if (!event) {

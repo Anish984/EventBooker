@@ -14,7 +14,7 @@ export const getRegisteredEvents = async (req: Request, res: Response): Promise<
       .lean();
 
 
-      const registeredEvents = bookings.map((b) => b.event);
+      const registeredEvents = bookings.map((b) => ({event:b.event,status:b.status}));
 
       res.status(200).json(registeredEvents);
     } catch (err) {
