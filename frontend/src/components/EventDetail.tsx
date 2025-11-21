@@ -1,15 +1,64 @@
 import Header from "./Header";
 import { Card, CardContent, CardTitle } from "./ui/card";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Badge } from "./ui/badge";
 import { Calendar, LocationEditIcon } from "lucide-react";
-import { TicketDialog } from "./TicketDialog";
-import { Label } from "./ui/label";
+import { Button } from "./ui/button";
+import { useState } from "react";
+import axios from "axios";
 
 const EventDetail = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const { title, location, date, price } = state || {};
+  const { id, title, location, date, description } = state || {};
+
+  const handleRegister = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+
+      if (!token || !userId) {
+        alert("Please login to register for events");
+        navigate("/");
+        return;
+      }
+
+      // Call your backend API to create a booking
+      const res = await axios.post(
+        "http://localhost:3000/api/bookings/create",
+        {
+          eventId: id,
+          userId: userId,
+          status: "pending",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        alert(
+          "✅ Approval has been requested! You'll be notified once the organizer reviews your registration."
+        );
+        navigate("/home");
+      }
+    } catch (error: any) {
+      console.error("Error registering for event:", error);
+      if (error.response?.status === 409) {
+        alert("You have already registered for this event!");
+      } else {
+        alert("Failed to register for event. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -25,10 +74,16 @@ const EventDetail = () => {
         <Badge variant={"default"}>Hackathon</Badge>
         <div className="flex justify-between mr-7">
           <CardTitle className="text-4xl mt-2 mb-2">{title}</CardTitle>
-          <Label className="text-3xl font-bold">₹{price}/-</Label>
+        </div>
+        <div className="mt-5">
+          <CardContent>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              {description || "No description available."}
+            </p>
+          </CardContent>
         </div>
 
-        <div className="flex justify-between ">
+        <div className="flex justify-between mt-5">
           <div>
             <div className="flex">
               <Calendar className="w-4.5" />
@@ -41,15 +96,17 @@ const EventDetail = () => {
             </div>
           </div>
           <div>
-            <TicketDialog
-              title={title}
-              location={location}
-              date={date}
-              price={price}
-            />
-            {/* <Button variant={"default"}  onClick={handleBuyTicket}>Buy ticket</Button> */}
+            <Button
+              variant={"default"}
+              className="w-40 h-10 m-auto"
+              onClick={handleRegister}
+              disabled={loading}
+            >
+              {loading ? "Registering..." : "Register"}
+            </Button>
           </div>
         </div>
+        
       </Card>
     </div>
   );

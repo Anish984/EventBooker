@@ -7,7 +7,6 @@ const Home = () => {
         <Header/>
         <Events/>
         <Footer/>
-                
     </>
   )
 }

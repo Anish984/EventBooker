@@ -111,18 +111,6 @@ const HostEventForm = () => {
           </div>
 
           <div>
-            <Label htmlFor="price">Ticket Price (₹)</Label>
-            <Input
-              id="price"
-              name="price"
-              type="number"
-              placeholder="Enter price"
-              value={eventData.price}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
