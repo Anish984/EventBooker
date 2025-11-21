@@ -5,7 +5,7 @@ import { cancelEvent } from '../controllers/userControllers/cancelEvent';
 import {registerNewEvent} from '../controllers/userControllers/registerNewEvent';
 import { createEvent } from '../controllers/userControllers/createEvent';
 import { getRegisteredEvents } from '../controllers/userControllers/getRegisteredEvents';
-import { updateProfile } from '../controllers/userControllers/uploadProfile';
+import { updateProfile,getProfile } from '../controllers/userControllers/uploadProfile';
 import {getCreatedEvents} from '../controllers/userControllers/getCreatedEvents'
 const router = Router();
 
@@ -26,6 +26,6 @@ router.get("/createdEvents",auth,getCreatedEvents);
 
 router.post("/updateProfile",auth,upload.fields([{ name: "idCard" }, { name: "profilePic" }]),updateProfile);
 
-
+router.get("/profile",auth,getProfile);
 
 export default router;

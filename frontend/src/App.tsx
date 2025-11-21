@@ -8,6 +8,9 @@ import BookTicket from "./components/BookTicket";
 import { ThemeProvider } from "./components/themeProvider";
 import QRPage from "./components/qrPage";
 import LandingPage from "./pages/LandingPage";
+import ProfilePage from "./pages/ProfilePage";
+import RegisteredEventsPage from "./pages/RegisteredEventsPage";
+import MyEventsPage from "./pages/MyEventsPage";
 const App = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -21,6 +24,9 @@ const App = () => {
           <Route path="/event/:id/book" element={<BookTicket />} />
           <Route path="/event/:id/qr" element={<QRPage/>} />
           <Route path="/landing" element={<LandingPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/registered" element={<RegisteredEventsPage />} />
+          <Route path="/my-events" element={<MyEventsPage />} />
         </Routes>
       </Router>
     </ThemeProvider>

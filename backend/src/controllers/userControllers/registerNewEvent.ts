@@ -19,12 +19,12 @@ export const registerNewEvent =async (req: Request, res: Response): Promise<void
       // 2️⃣ Check if user has uploaded ID card
       if (!user.idCard) {
         res
-          .status(400)
+          .status(401)
           .json({ message: "Please upload your ID card before registering." });
         return;
       }
       if(!user.college){
-        res.status(400).json({message:"Please update your college name before registering."})
+        res.status(401).json({message:"Please update your college name before registering."})
         return;
       }
       // 3️⃣ Validate Event

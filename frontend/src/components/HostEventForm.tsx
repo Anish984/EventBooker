@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import BackToHome from "./BackToHome";
 
 const HostEventForm = () => {
   const [eventData, setEventData] = useState({
@@ -15,11 +16,10 @@ const HostEventForm = () => {
     price: "",
     description: "",
   });
+
+  const [eventPic, setEventPic] = useState<File | null>(null); // 👈 image state
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const handleClick = ()=>{
-  //   navigate("/home")
-  // }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -28,25 +28,39 @@ const HostEventForm = () => {
     setEventData({ ...eventData, [name]: value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setEventPic(e.target.files[0]); // 👈 save selected file
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const token = localStorage.getItem("token");
-      const newEvent = {
-        title: eventData.name,
-        description: eventData.description,
-        date: eventData.date,
-        address: eventData.location,
-        organizer: localStorage.getItem("userId"),
-      };
+
+      // 👇 Use FormData instead of normal object
+      const formData = new FormData();
+      formData.append("title", eventData.name);
+      formData.append("description", eventData.description);
+      formData.append("date", eventData.date);
+      formData.append("address", eventData.location);
+      formData.append("price", eventData.price);
+      formData.append("organizer", localStorage.getItem("userId") || "");
+
+      if (eventPic) {
+        formData.append("eventPic", eventPic); // 👈 name must match backend field
+      }
 
       const res = await axios.post(
         "http://localhost:3000/api/createEvent",
-        newEvent,
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            // ❌ Don't manually set Content-Type; axios will set multipart/form-data with correct boundary
           },
         }
       );
@@ -72,8 +86,14 @@ const HostEventForm = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="mb-5">
             <Label htmlFor="picture">Upload Event poster</Label>
-            <Input type="file" id="picture" accept="image/*" />
+            <Input
+              type="file"
+              id="picture"
+              accept="image/*"
+              onChange={handleFileChange} // 👈 handle file change
+            />
           </div>
+
           <div className="mb-5">
             <Label htmlFor="name">Event Name</Label>
             <Input
@@ -139,6 +159,7 @@ const HostEventForm = () => {
           </Button>
         </form>
       </CardContent>
+      <BackToHome/>
     </Card>
   );
 };

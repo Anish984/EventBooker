@@ -48,3 +48,15 @@ export const updateProfile =  async (req: Request, res: Response): Promise<Respo
       return res.status(500).json({ message: "Error updating profile", error: err });
     }
   }
+
+
+
+  export const getProfile = async(req:Request,res:Response)=>{
+    const userId = req.userId;
+    try{
+      const user = await User.findById(userId);
+      return res.status(200).json({userName:user.username,idCard:user.idCard,profilePic:user.profilePic,college:user.college})
+    }catch(e){
+      return res.status(500).json({error:e});
+    }
+  }

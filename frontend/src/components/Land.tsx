@@ -1,21 +1,16 @@
 import { Card, CardContent } from "./ui/card";
-import profile from "../assets/group-people-near-stage-concert_250224-175 2.png";
 import {
   BanknoteArrowDown,
   BookmarkIcon,
   CirclePercent,
   ClockCheck,
-  Dumbbell,
   FileBadge,
   Medal,
   Music,
-  PartyPopper,
   Tags,
   Ticket,
   Trophy,
-  Tv,
 } from "lucide-react";
-import { useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   Accordion,
@@ -26,41 +21,7 @@ import {
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 
-const singers = [
-  {
-    id: 1,
-    name: "Drake",
-    date: "20 June, Toronto",
-    img: "/mnt/data/da7f7cae-c349-45a0-93c5-6e0de2ba6183.png",
-  },
-  {
-    id: 2,
-    name: "Taylor Swift",
-    date: "10 July, Nashville",
-    img: "/images/taylor.jpg",
-  },
-  {
-    id: 3,
-    name: "Ed Sheeran",
-    date: "25 August, Los Angeles",
-    img: "/images/ed.jpg",
-  },
-  {
-    id: 4,
-    name: "Billie Eilish",
-    date: "30 September, Chicago",
-    img: "/images/billie.jpg",
-  },
-  {
-    id: 5,
-    name: "Adele",
-    date: "5 May, New York",
-    img: "/images/adele.jpg",
-  },
-  // add more...
-];
 const Land = () => {
-  const scrollerRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const handleClick = () => {
     navigate("/home");

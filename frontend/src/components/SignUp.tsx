@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
+
 function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -9,22 +10,47 @@ function SignUp() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async(e: FormEvent<HTMLFormElement>):Promise<void> => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    try{
-      const res = await axios.post("http://localhost:3000/api/auth/signup",{username:name,email:email,password:password});
-      if(res.status===201){ 
+
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/signup", {
+        username: name,
+        email,
+        password,
+      });
+
+      console.log("Signup response:", res.data);
+
+      if (res.status === 201) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userId", res.data.userId);
+
+        console.log("Token stored:", localStorage.getItem("token"));
+        console.log("UserId stored:", localStorage.getItem("userId"));
+
+        alert("Signup Successful");
         navigate("/home");
+      } else {
+        alert("Signup failed. Please try again.");
       }
-    }catch(e){
-      console.error("Login failed",e);
+    } catch (err: any) {
+      console.error("Signup failed", err);
+      alert(err.response?.data?.message || "Signup failed. Please try again.");
     }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
       <div className="w-full max-w-md rounded-xl bg-white p-10 shadow-lg">
-        <h1 className="text-center text-4xl font-extrabold text-gray-800">Sign Up</h1>
+        <h1 className="text-center text-4xl font-extrabold text-gray-800">
+          Sign Up
+        </h1>
         <p className="mt-2 mb-8 text-center text-sm text-gray-600">
           Sign up to create your account and join us!
         </p>
@@ -36,9 +62,11 @@ function SignUp() {
               type="text"
               placeholder="Name"
               value={name}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setName(e.target.value)
+              }
               required
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-base outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="w-full rounded-lg border border-gray-300  text-base text-gray-900 bg-gray-50 p-3  outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
 
@@ -48,9 +76,11 @@ function SignUp() {
               type="email"
               placeholder="Email"
               value={email}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
               required
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-base outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3  text-base text-gray-900 outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
 
@@ -60,9 +90,11 @@ function SignUp() {
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
               required
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-base outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3  text-base text-gray-900 outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
 
@@ -72,9 +104,11 @@ function SignUp() {
               type="password"
               placeholder="Confirm Password"
               value={confirmPassword}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setConfirmPassword(e.target.value)
+              }
               required
-              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-base outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3  text-base text-gray-900 outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
 

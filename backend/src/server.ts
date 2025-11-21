@@ -15,7 +15,7 @@ app.use(
       if (!origin) return callback(null, true);
 
       // Allow any domain starting with "https://event-booker"
-      if (origin.startsWith("https://event-booker") || origin === "http://localhost:5173") {
+      if (origin.startsWith("https://event-booker") || origin === "http://localhost:5173" || origin.startsWith("http://localhost:")) {
           return callback(null, true);
       }
       // Otherwise, block it
