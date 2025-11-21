@@ -50,7 +50,7 @@ const Profile = () => {
         }
 
         const res = await axios.get<ProfileResponse>(
-          "http://localhost:3000/api/profile",
+          "https://eventbooker.onrender.com/api/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -130,7 +130,7 @@ const Profile = () => {
         formData.append("idCard", profileData.idCard);
       }
 
-      await axios.post("http://localhost:3000/api/updateProfile", formData, {
+      await axios.post("https://eventbooker.onrender.com/api/updateProfile", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

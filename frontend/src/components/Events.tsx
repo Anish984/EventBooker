@@ -26,7 +26,7 @@ const Events = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:3000/api/events", {
+      const res = await axios.get("https://eventbooker.onrender.com/api/events", {
         headers: {
           Authorization: token ? `Bearer ${token}` : "",
         },

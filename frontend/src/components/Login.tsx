@@ -16,7 +16,7 @@ function Login() {
     try {
       console.log("Attempting login with:", { email });
 
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
+      const res = await axios.post("https://eventbooker.onrender.com/api/auth/login", {
         email,
         password,
       });

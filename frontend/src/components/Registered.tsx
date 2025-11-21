@@ -58,7 +58,7 @@ const Registered = () => {
       }
 
       const res = await axios.get<RegisteredEvent[]>(
-        "http://localhost:3000/api/getRegisteredEvents",
+        "https://eventbooker.onrender.com/api/getRegisteredEvents",
         {
           headers: {
             Authorization: `Bearer ${token}`,

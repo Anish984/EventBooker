@@ -62,7 +62,7 @@ const MyEvents = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:3000/api/createdEvents", {
+      const res = await axios.get("https://eventbooker.onrender.com/api/createdEvents", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -82,7 +82,7 @@ const MyEvents = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        `http://localhost:3000/api/pendingRequests?eventId=${eventId}`,
+        `https://eventbooker.onrender.com/api/pendingRequests?eventId=${eventId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -108,7 +108,7 @@ const MyEvents = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:3000/api/events/${eventId}`, {
+      await axios.delete(`https://eventbooker.onrender.com/api/events/${eventId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -145,7 +145,7 @@ const MyEvents = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:3000/api/handleRequest",
+        "https://eventbooker.onrender.com/api/handleRequest",
         { bookingId, action },
         {
           headers: {

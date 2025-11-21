@@ -55,7 +55,7 @@ const HostEventForm = () => {
       }
 
       const res = await axios.post(
-        "http://localhost:3000/api/createEvent",
+        "https://eventbooker.onrender.com/api/createEvent",
         formData,
         {
           headers: {

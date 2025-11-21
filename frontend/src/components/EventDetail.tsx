@@ -30,7 +30,7 @@ const EventDetail = () => {
 
       // Call your backend API to create a booking
       const res = await axios.post(
-        "http://localhost:3000/api/registerNewEvent",
+        "https://eventbooker.onrender.com/api/registerNewEvent",
         {
           eventId: id,
           userId: userId,
